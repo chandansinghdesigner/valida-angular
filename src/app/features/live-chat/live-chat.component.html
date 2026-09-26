@@ -1,0 +1,48 @@
+<section class="card chat-card" aria-labelledby="chatTitle" [class.notif-item--flash]="flash">
+  <h2 class="card__title" id="chatTitle">
+    <svg class="card__title-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M21 11.5C21.0034 12.8199 20.6951 14.1219 20.1 15.3C19.3944 16.7118 18.3098 17.8992 16.9674 18.7293C15.6251 19.5594 14.0782 19.9994 12.5 20C11.1801 20.0035 9.87812 19.6951 8.7 19.1L3 21L4.9 15.3C4.30493 14.1219 3.99656 12.8199 4 11.5C4.00061 9.92179 4.44061 8.37488 5.27072 7.03258C6.10083 5.69028 7.28825 4.6056 8.7 3.90003C9.87812 3.30496 11.1801 2.99659 12.5 3.00003H13C15.0843 3.11502 17.053 3.99479 18.5291 5.47089C20.0052 6.94699 20.885 8.91568 21 11V11.5Z"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+      />
+    </svg>
+    Live Chat
+  </h2>
+
+  <div class="chat-status" [ngClass]="{ 'chat-status--connected': status === 'connected', 'chat-status--reconnecting': status === 'reconnecting' }">
+    <span class="chat-status__dot"></span>
+    <span [ngSwitch]="status">
+      <span *ngSwitchCase="'connected'">Connected</span>
+      <span *ngSwitchCase="'connecting'">Connecting…</span>
+      <span *ngSwitchCase="'reconnecting'">Reconnecting…</span>
+      <span *ngSwitchDefault>Offline (messages send locally)</span>
+    </span>
+  </div>
+
+  <div class="chat-messages">
+    <div class="chat-empty" *ngIf="!messages.length">No messages yet. Say hello to the candidate.</div>
+
+    <div
+      class="chat-bubble"
+      *ngFor="let message of messages"
+      [class.chat-bubble--proctor]="message.sender === 'proctor'"
+    >
+      <span>{{ message.text }}</span>
+      <span class="chat-bubble__meta">{{ message.senderName }} · {{ message.timestamp | date: 'shortTime' }}</span>
+    </div>
+
+    <div #scrollAnchor></div>
+  </div>
+
+  <form class="chat-input-row" (ngSubmit)="send()">
+    <input
+      type="text"
+      name="draft"
+      [(ngModel)]="draft"
+      placeholder="Type a message to the candidate…"
+      autocomplete="off"
+      [disabled]="sending"
+    />
+    <button class="btn btn--primary btn--sm" type="submit" [disabled]="sending || !draft.trim()">Send</button>
+  </form>
+</section>

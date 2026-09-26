@@ -1,0 +1,209 @@
+<div class="bg-decor" aria-hidden="true">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <svg class="wave" viewBox="0 0 1720 400" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,300 C300,200 600,380 900,300 C1200,220 1500,340 1720,260 L1720,400 L0,400 Z" fill="url(#waveGrad)" />
+    <defs>
+      <linearGradient id="waveGrad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#c7d9ff" />
+        <stop offset="50%" stop-color="#bdeaf0" />
+        <stop offset="100%" stop-color="#c9c3fb" />
+      </linearGradient>
+    </defs>
+  </svg>
+</div>
+
+<div class="page">
+  <header class="topbar">
+    <div class="logo-block">
+      <a routerLink="/login" class="logo" aria-label="Valida home">
+        <img src="assets/valida-logo.png" alt="Valida" />
+      </a>
+    </div>
+  </header>
+
+  <main class="content">
+    <section class="hero" id="hero">
+      <div class="eyebrow">
+        <span class="eyebrow-line" aria-hidden="true"></span>
+        <span>Live Proctoring System</span>
+      </div>
+
+      <h1 class="headline">
+        <span class="line line-navy">Smart Proctoring.</span>
+        <span class="line line-grad">Real-Time Integrity.</span>
+      </h1>
+
+      <div class="illustration" id="illustration" aria-hidden="true">
+        <div class="ring ring-1"></div>
+        <div class="ring ring-2"></div>
+        <div class="shield-float">
+          <svg width="56" height="62" viewBox="0 0 56 62" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M28 2L52 11V26C52 39.5 42 51.5 28 56C14 51.5 4 39.5 4 26V11L28 2Z" fill="url(#shieldGrad)" />
+            <path d="M18 28L25 35L39 20" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+            <defs>
+              <linearGradient id="shieldGrad" x1="4" y1="2" x2="52" y2="56" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#3F8CFF" />
+                <stop offset="1" stop-color="#2FD9B0" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+
+        <div class="cam-chip">
+          <i class="fa-solid fa-camera" aria-hidden="true"></i>
+        </div>
+
+        <div class="monitor">
+          <div class="monitor-notch"></div>
+          <div class="monitor-screen">
+            <span class="live-badge"><i class="fa-solid fa-circle" aria-hidden="true"></i> LIVE</span>
+            <div class="face-box"></div>
+            <svg class="corner c-tl" width="18" height="18" viewBox="0 0 18 18">
+              <path d="M18 0H4a4 4 0 0 0-4 4v14" fill="none" stroke="#3ee08e" stroke-width="3" />
+            </svg>
+            <svg class="corner c-tr" width="18" height="18" viewBox="0 0 18 18">
+              <path d="M0 0h14a4 4 0 0 1 4 4v14" fill="none" stroke="#3ee08e" stroke-width="3" />
+            </svg>
+            <svg class="corner c-bl" width="18" height="18" viewBox="0 0 18 18">
+              <path d="M18 18H4a4 4 0 0 1-4-4V0" fill="none" stroke="#3ee08e" stroke-width="3" />
+            </svg>
+            <svg class="corner c-br" width="18" height="18" viewBox="0 0 18 18">
+              <path d="M0 18h14a4 4 0 0 0 4-4V0" fill="none" stroke="#3ee08e" stroke-width="3" />
+            </svg>
+            <svg class="candidate" viewBox="0 0 220 170" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+              <rect width="220" height="170" fill="#e9eef7" />
+              <circle cx="110" cy="70" r="40" fill="#c9a184" />
+              <path d="M40 170c0-45 30-72 70-72s70 27 70 72" fill="#2b3450" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="card monitor-card">
+          <ul class="status-list">
+            <li><span class="dot good"><i class="fa-solid fa-check" aria-hidden="true"></i></span>Single Face Detected</li>
+            <li><span class="dot good"><i class="fa-solid fa-check" aria-hidden="true"></i></span>Face Position Normal</li>
+            <li><span class="dot good"><i class="fa-solid fa-check" aria-hidden="true"></i></span>Gaze Monitoring</li>
+            <li><span class="dot warn"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i></span>Head Turn Detected</li>
+          </ul>
+        </div>
+
+        <div class="card screen-card">
+          <div class="screen-card-top">
+            <span class="win-dots"><i></i><i></i><i></i></span>
+          </div>
+          <div class="screen-card-body">
+            <span class="skel skel-a"></span>
+            <span class="skel skel-b"></span>
+            <span class="skel skel-c"></span>
+          </div>
+          <span class="screen-live-pill"><i class="fa-solid fa-circle" aria-hidden="true"></i> Screen Live</span>
+        </div>
+
+        <div class="card mini-card">
+          <span class="mini-icon"><i class="fa-solid fa-video" aria-hidden="true"></i></span>
+          <span class="mini-text">
+            <strong>24/7 Monitoring</strong>
+            <small>AI + Human Proctoring</small>
+          </span>
+        </div>
+      </div>
+
+      <ul class="features">
+        <li class="feature-item">
+          <span class="feature-icon icon-blue"><i class="fa-solid fa-camera" aria-hidden="true"></i></span>
+          <span>Live Candidate<br />Camera Feed</span>
+        </li>
+        <li class="feature-item">
+          <span class="feature-icon icon-purple"><i class="fa-solid fa-display" aria-hidden="true"></i></span>
+          <span>Screen Monitoring<br />&amp; Recording</span>
+        </li>
+        <li class="feature-item">
+          <span class="feature-icon icon-teal"><i class="fa-solid fa-microchip" aria-hidden="true"></i></span>
+          <span>AI-Powered<br />Analytics</span>
+        </li>
+        <li class="feature-item">
+          <span class="feature-icon icon-indigo"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></span>
+          <span>Real-Time Alerts<br />&amp; Proctor Support</span>
+        </li>
+      </ul>
+    </section>
+
+    <section class="login-wrap" id="loginWrap" aria-labelledby="loginHeading">
+      <form class="login-card" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <h2 id="loginHeading">Sign in to Valida</h2>
+        <p class="login-sub">Enter your credentials to access the live proctoring console.</p>
+
+        <div class="field">
+          <label for="email">Email / Username</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-envelope field-icon" aria-hidden="true"></i>
+            <input
+              type="text"
+              id="email"
+              formControlName="email"
+              placeholder="you@company.com"
+              autocomplete="username"
+            />
+          </div>
+          <span class="field-error" role="alert" *ngIf="email.invalid && email.touched">
+            <ng-container *ngIf="email.errors?.['required']">Email is required.</ng-container>
+            <ng-container *ngIf="email.errors?.['email']">Enter a valid email address.</ng-container>
+          </span>
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-lock field-icon" aria-hidden="true"></i>
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              id="password"
+              formControlName="password"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+            />
+            <button
+              type="button"
+              class="eye-toggle"
+              [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+              [attr.aria-pressed]="showPassword"
+              (click)="togglePasswordVisibility()"
+            >
+              <i class="fa-solid" [class.fa-eye]="!showPassword" [class.fa-eye-slash]="showPassword" aria-hidden="true"></i>
+            </button>
+          </div>
+          <span class="field-error" role="alert" *ngIf="password.invalid && password.touched">
+            <ng-container *ngIf="password.errors?.['required']">Password is required.</ng-container>
+            <ng-container *ngIf="password.errors?.['minlength']">Password must be at least 8 characters.</ng-container>
+          </span>
+        </div>
+
+        <div class="row-between">
+          <label class="remember">
+            <input type="checkbox" formControlName="remember" />
+            <span class="checkbox-vis" aria-hidden="true"><i class="fa-solid fa-check"></i></span>
+            Remember me
+          </label>
+          <a href="javascript:void(0)" class="forgot">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="signin-btn" [disabled]="submitting">
+          <span class="btn-content">
+            <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+            <span>{{ submitting ? 'Signing in…' : 'Sign In' }}</span>
+          </span>
+        </button>
+
+        <div class="form-status" role="status" aria-live="polite" *ngIf="formStatus" [style.color]="formStatus.type === 'error' ? '#EF4444' : '#16A34A'">
+          {{ formStatus.message }}
+        </div>
+
+        <p class="login-sub" style="text-align:center; margin-top: 14px;">
+          Don't have an account? <a routerLink="/signup" style="color: var(--secondary); font-weight: 600;">Create one</a>
+        </p>
+      </form>
+    </section>
+  </main>
+</div>

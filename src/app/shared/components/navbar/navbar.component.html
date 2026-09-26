@@ -1,0 +1,105 @@
+<header class="header">
+  <div class="header__inner">
+    <div class="brand">
+      <a routerLink="/dashboard" class="brand__logo" aria-label="Valida home">
+        <img src="assets/valida-logo.png" alt="Valida Logo" />
+      </a>
+    </div>
+
+    <nav class="nav" aria-label="Main navigation">
+      <a routerLink="/dashboard" routerLinkActive="nav__link--active" class="nav__link">
+        <svg class="nav__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M3 11L12 3L21 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M5 10V20C5 20.5523 5.44772 21 6 21H9C9.55228 21 10 20.5523 10 20V15C10 14.4477 10.4477 14 11 14H13C13.5523 14 14 14.4477 14 15V20C14 20.5523 14.4477 21 15 21H18C18.5523 21 19 20.5523 19 20V10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        Dashboard
+      </a>
+      <a routerLink="/dashboard" class="nav__link">
+        <svg class="nav__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="3" y="4" width="18" height="13" rx="2" stroke="currentColor" stroke-width="2" />
+          <path d="M8 21H16M12 17V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
+        Live Exams
+      </a>
+      <a routerLink="/notifications" routerLinkActive="nav__link--active" class="nav__link">
+        <svg class="nav__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M18 8C18 6.4087 17.3679 4.88258 16.2426 3.75736C15.1174 2.63214 13.5913 2 12 2C10.4087 2 8.88258 2.63214 7.75736 3.75736C6.63214 4.88258 6 6.4087 6 8C6 15 3 17 3 17H21C21 17 18 15 18 8Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M13.73 21C13.5542 21.3031 13.3019 21.5547 12.9982 21.7295C12.6946 21.9044 12.3504 21.9965 12 21.9965C11.6496 21.9965 11.3054 21.9044 11.0018 21.7295C10.6982 21.5547 10.4458 21.3031 10.27 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        Alerts
+        <span class="nav__badge" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
+      </a>
+    </nav>
+
+    <div class="header__profile-wrap" [class.header__profile-wrap--open]="profileMenuOpen">
+      <button
+        class="header__profile"
+        type="button"
+        aria-label="Account menu"
+        aria-haspopup="true"
+        [attr.aria-expanded]="profileMenuOpen"
+        aria-controls="profileDropdown"
+        (click)="toggleProfileMenu()"
+      >
+        <span class="header__avatar">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2" />
+            <path d="M4 21C4 17.134 7.582 14 12 14C16.418 14 20 17.134 20 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </span>
+        <svg class="header__caret" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+
+      <div class="profile-dropdown" [class.profile-dropdown--open]="profileMenuOpen" id="profileDropdown" role="menu" [attr.aria-hidden]="!profileMenuOpen">
+        <a href="javascript:void(0)" class="profile-dropdown__item" role="menuitem" (click)="closeProfileMenu()">
+          <span class="profile-dropdown__icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8" />
+              <path d="M4 21C4 17.134 7.582 14 12 14C16.418 14 20 17.134 20 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+            </svg>
+          </span>
+          <span>
+            <strong>{{ currentUser?.name || 'Profile' }}</strong>
+            <small>{{ currentUser?.email || 'View your profile' }}</small>
+          </span>
+        </a>
+
+        <div class="profile-dropdown__divider" role="separator"></div>
+
+        <a href="javascript:void(0)" class="profile-dropdown__item profile-dropdown__item--logout" role="menuitem" (click)="logout()">
+          <span class="profile-dropdown__icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path d="M9 21H5C4.45 21 4 20.55 4 20V4C4 3.45 4.45 3 5 3H9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+              <path d="M16 17L21 12L16 7M21 12H9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+          <span>
+            <strong>Logout</strong>
+            <small>Sign out of your account</small>
+          </span>
+        </a>
+      </div>
+    </div>
+
+    <button
+      class="hamburger"
+      [class.hamburger--active]="mobileNavOpen"
+      type="button"
+      aria-label="Open navigation menu"
+      [attr.aria-expanded]="mobileNavOpen"
+      aria-controls="mobileNav"
+      (click)="toggleMobileNav()"
+    >
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <nav class="mobile-nav" [class.mobile-nav--open]="mobileNavOpen" id="mobileNav" aria-label="Mobile navigation">
+    <a routerLink="/dashboard" routerLinkActive="mobile-nav__link--active" class="mobile-nav__link" (click)="closeMobileNav()">Dashboard</a>
+    <a routerLink="/dashboard" class="mobile-nav__link" (click)="closeMobileNav()">Live Exams</a>
+    <a routerLink="/notifications" routerLinkActive="mobile-nav__link--active" class="mobile-nav__link" (click)="closeMobileNav()">Alerts</a>
+    <a href="javascript:void(0)" class="mobile-nav__link" (click)="logout()">Logout</a>
+  </nav>
+</header>

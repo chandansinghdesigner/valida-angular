@@ -1,0 +1,106 @@
+<div class="bg-decor" aria-hidden="true">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<div class="page">
+  <header class="topbar">
+    <div class="logo-block">
+      <a routerLink="/login" class="logo" aria-label="Valida home">
+        <img src="assets/valida-logo.png" alt="Valida" />
+      </a>
+    </div>
+  </header>
+
+  <main class="content" style="justify-content:center;">
+    <section class="login-wrap" id="signupWrap" aria-labelledby="signupHeading" style="margin: 0 auto;">
+      <form class="login-card" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <h2 id="signupHeading">Create your Valida account</h2>
+        <p class="login-sub">Sign up to access the live proctoring console.</p>
+
+        <div class="field">
+          <label for="name">Full Name</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-user field-icon" aria-hidden="true"></i>
+            <input type="text" id="name" formControlName="name" placeholder="Jane Doe" autocomplete="name" />
+          </div>
+          <span class="field-error" role="alert" *ngIf="name.invalid && name.touched">
+            <ng-container *ngIf="name.errors?.['required']">Name is required.</ng-container>
+            <ng-container *ngIf="name.errors?.['minlength']">Name must be at least 2 characters.</ng-container>
+          </span>
+        </div>
+
+        <div class="field">
+          <label for="signupEmail">Email</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-envelope field-icon" aria-hidden="true"></i>
+            <input type="text" id="signupEmail" formControlName="email" placeholder="you@company.com" autocomplete="email" />
+          </div>
+          <span class="field-error" role="alert" *ngIf="email.invalid && email.touched">
+            <ng-container *ngIf="email.errors?.['required']">Email is required.</ng-container>
+            <ng-container *ngIf="email.errors?.['email']">Enter a valid email address.</ng-container>
+          </span>
+        </div>
+
+        <div class="field">
+          <label for="signupPassword">Password</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-lock field-icon" aria-hidden="true"></i>
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              id="signupPassword"
+              formControlName="password"
+              placeholder="Create a password"
+              autocomplete="new-password"
+            />
+            <button type="button" class="eye-toggle" [attr.aria-pressed]="showPassword" (click)="togglePassword()">
+              <i class="fa-solid" [class.fa-eye]="!showPassword" [class.fa-eye-slash]="showPassword" aria-hidden="true"></i>
+            </button>
+          </div>
+          <span class="field-error" role="alert" *ngIf="password.invalid && password.touched">
+            <ng-container *ngIf="password.errors?.['required']">Password is required.</ng-container>
+            <ng-container *ngIf="password.errors?.['weakPassword']">
+              Use 8+ characters with upper &amp; lower case letters, a number, and a symbol.
+            </ng-container>
+          </span>
+        </div>
+
+        <div class="field">
+          <label for="confirmPassword">Confirm Password</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-lock field-icon" aria-hidden="true"></i>
+            <input
+              [type]="showConfirmPassword ? 'text' : 'password'"
+              id="confirmPassword"
+              formControlName="confirmPassword"
+              placeholder="Re-enter your password"
+              autocomplete="new-password"
+            />
+            <button type="button" class="eye-toggle" [attr.aria-pressed]="showConfirmPassword" (click)="toggleConfirmPassword()">
+              <i class="fa-solid" [class.fa-eye]="!showConfirmPassword" [class.fa-eye-slash]="showConfirmPassword" aria-hidden="true"></i>
+            </button>
+          </div>
+          <span class="field-error" role="alert" *ngIf="confirmPassword.touched && form.errors?.['passwordMismatch']">
+            Passwords do not match.
+          </span>
+        </div>
+
+        <button type="submit" class="signin-btn" [disabled]="submitting">
+          <span class="btn-content">
+            <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+            <span>{{ submitting ? 'Creating account…' : 'Sign Up' }}</span>
+          </span>
+        </button>
+
+        <div class="form-status" role="status" aria-live="polite" *ngIf="formStatus" [style.color]="formStatus.type === 'error' ? '#EF4444' : '#16A34A'">
+          {{ formStatus.message }}
+        </div>
+
+        <p class="login-sub" style="text-align:center; margin-top: 14px;">
+          Already have an account? <a routerLink="/login" style="color: var(--secondary); font-weight: 600;">Sign in</a>
+        </p>
+      </form>
+    </section>
+  </main>
+</div>

@@ -1,0 +1,299 @@
+<app-navbar [unreadCount]="unreadCount"></app-navbar>
+
+<main class="page">
+  <section class="hero" style="flex-direction: column;">
+    <h1 class="hero__title">Smart Proctoring. <span class="hero__title--accent">Real-Time Integrity.</span></h1>
+    <p class="hero__subtitle">
+      Monitor live examinations, detect suspicious activity, and maintain exam integrity in real time.
+    </p>
+  </section>
+
+  <div class="grid">
+    <!-- ---- MAIN COLUMN ---- -->
+    <div class="grid__main">
+      <!-- Live Proctoring Card -->
+      <section class="card" aria-labelledby="liveProctoringTitle">
+        <h2 class="card__title" id="liveProctoringTitle">
+          <svg class="card__title-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M23 7L16 12L23 17V7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <rect x="1" y="5" width="15" height="14" rx="2" stroke="currentColor" stroke-width="2" />
+          </svg>
+          Live Proctoring
+        </h2>
+
+        <ng-container *ngIf="activeSession; else noSession">
+          <div class="proctor-feed">
+            <div class="proctor-feed__video">
+              <span class="live-badge"><span class="live-badge__dot" aria-hidden="true"></span>LIVE</span>
+              <div class="proctor-feed__avatar" role="img" aria-label="Candidate camera feed placeholder">
+                <div class="proctor-feed__face"></div>
+                <div class="proctor-feed__headphones"></div>
+              </div>
+            </div>
+            <div class="proctor-feed__screen" role="img" aria-label="Candidate screen share placeholder">
+              <div class="proctor-feed__screen-topbar">
+                <span></span><span></span><span></span>
+                <span class="proctor-feed__screen-pill"></span>
+              </div>
+              <div class="proctor-feed__screen-body">
+                <div class="proctor-feed__screen-heading"></div>
+                <div class="proctor-feed__screen-lines"><span></span><span></span></div>
+                <div class="proctor-feed__screen-options"><span></span><span></span><span></span><span></span></div>
+              </div>
+              <div class="proctor-feed__screen-footer">
+                <span class="proctor-feed__screen-btn"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="proctor-meta">
+            <p class="proctor-meta__name">
+              {{ activeSession.name }} <span class="proctor-meta__divider">|</span> Exam ID: {{ activeSession.examId }}
+            </p>
+          </div>
+
+          <div class="proctor-actions">
+            <button class="btn btn--danger" type="button" (click)="endProctoring()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect x="6" y="6" width="12" height="12" rx="1.5" fill="currentColor" />
+              </svg>
+              End Proctoring
+            </button>
+            <button class="btn btn--primary" type="button" (click)="startProctoring(activeSession)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M21 11.5C21.0034 12.8199 20.6951 14.1219 20.1 15.3C19.3944 16.7118 18.3098 17.8992 16.9674 18.7293C15.6251 19.5594 14.0782 19.9994 12.5 20C11.1801 20.0035 9.87812 19.6951 8.7 19.1L3 21L4.9 15.3C4.30493 14.1219 3.99656 12.8199 4 11.5C4.00061 9.92179 4.44061 8.37488 5.27072 7.03258C6.10083 5.69028 7.28825 4.6056 8.7 3.90003C9.87812 3.30496 11.1801 2.99659 12.5 3.00003H13C15.0843 3.11502 17.053 3.99479 18.5291 5.47089C20.0052 6.94699 20.885 8.91568 21 11V11.5Z"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                />
+              </svg>
+              Open Live Room
+            </button>
+          </div>
+        </ng-container>
+
+        <ng-template #noSession>
+          <p class="hero__subtitle" style="margin: 20px 0;">
+            No active proctoring session. Start one from the candidate list below.
+          </p>
+        </ng-template>
+      </section>
+
+      <!-- Candidate List Card -->
+      <section class="card" aria-labelledby="candidateListTitle">
+        <h2 class="card__title" id="candidateListTitle">
+          <svg class="card__title-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            />
+            <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2" />
+            <path
+              d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            />
+            <path
+              d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89317 18.7122 8.75608 18.1676 9.45768C17.623 10.1593 16.8604 10.6597 16 10.88"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            />
+          </svg>
+          Candidate List
+        </h2>
+
+        <div class="table-wrap">
+          <table class="candidate-table">
+            <thead>
+              <tr>
+                <th scope="col">Candidate Name</th>
+                <th scope="col">Exam ID</th>
+                <th scope="col">Status</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let candidate of candidates">
+                <td data-label="Candidate Name">{{ candidate.name }}</td>
+                <td data-label="Exam ID">{{ candidate.examId }}</td>
+                <td data-label="Status">
+                  <span
+                    class="status-pill"
+                    [ngClass]="{
+                      'status-pill--active': candidate.status === 'active',
+                      'status-pill--waiting': candidate.status === 'waiting',
+                      'status-pill--completed': candidate.status === 'completed'
+                    }"
+                  >
+                    <span class="status-pill__dot"></span>{{ statusLabel(candidate.status) }}
+                  </span>
+                </td>
+                <td data-label="Action">
+                  <button
+                    class="btn btn--primary btn--sm"
+                    type="button"
+                    *ngIf="candidate.status !== 'completed'; else reviewed"
+                    (click)="startProctoring(candidate)"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M5 3L19 12L5 21V3Z" fill="currentColor" />
+                    </svg>
+                    Start Proctoring
+                  </button>
+                  <ng-template #reviewed>
+                    <button class="btn btn--secondary btn--sm" type="button" disabled>Reviewed</button>
+                  </ng-template>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <!-- ---- SIDE COLUMN ---- -->
+    <div class="grid__side">
+      <!-- Notifications Card -->
+      <section class="card" aria-labelledby="notificationsTitle">
+        <h2 class="card__title" id="notificationsTitle">
+          <svg class="card__title-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M18 8C18 6.4087 17.3679 4.88258 16.2426 3.75736C15.1174 2.63214 13.5913 2 12 2C10.4087 2 8.88258 2.63214 7.75736 3.75736C6.63214 4.88258 6 6.4087 6 8C6 15 3 17 3 17H21C21 17 18 15 18 8Z"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            />
+            <path
+              d="M13.73 21C13.5542 21.3031 13.3019 21.5547 12.9982 21.7295C12.6946 21.9044 12.3504 21.9965 12 21.9965C11.6496 21.9965 11.3054 21.9044 11.0018 21.7295C10.6982 21.5547 10.4458 21.3031 10.27 21"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            />
+          </svg>
+          Notifications
+        </h2>
+
+        <ul class="notif-list">
+          <li class="notif-item" *ngFor="let n of notifications">
+            <span
+              class="notif-item__dot"
+              [ngClass]="{
+                'notif-item__dot--warning': n.severity === 'warning',
+                'notif-item__dot--danger': n.severity === 'danger',
+                'notif-item__dot--info': n.severity === 'info' || n.severity === 'success'
+              }"
+              aria-hidden="true"
+            ></span>
+            <div class="notif-item__body">
+              <p class="notif-item__text">{{ n.message }}</p>
+              <span class="notif-item__time">{{ n.timestamp | date: 'short' }}</span>
+            </div>
+          </li>
+          <li class="notif-item" *ngIf="!notifications.length">
+            <div class="notif-item__body">
+              <p class="notif-item__text">No recent notifications.</p>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Proctor Stats Card -->
+      <section class="card" aria-labelledby="statsTitle">
+        <h2 class="card__title" id="statsTitle">
+          <svg class="card__title-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M18 20V10M12 20V4M6 20V14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          Proctor Stats
+        </h2>
+
+        <div class="stats">
+          <div class="stat-box">
+            <div class="stat-box__icon stat-box__icon--info">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                />
+                <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" />
+              </svg>
+            </div>
+            <div class="stat-box__text">
+              <span class="stat-box__label">Active Proctors</span>
+              <span class="stat-box__value">{{ stats.activeProctors }}</span>
+              <span class="stat-box__meta stat-box__meta--success">Online</span>
+            </div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-box__icon stat-box__icon--primary">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2" />
+                <path d="M8 21H16M12 17V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              </svg>
+            </div>
+            <div class="stat-box__text">
+              <span class="stat-box__label">Live Exams</span>
+              <span class="stat-box__value">{{ stats.liveExams }}</span>
+              <span class="stat-box__meta stat-box__meta--info">In Progress</span>
+            </div>
+          </div>
+          <div class="stat-box" style="background: var(--danger-bg);">
+            <div class="stat-box__icon stat-box__icon--danger">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M4 15S5.5 14 8 14S12 16 15 16S18 15 18 15V3S16.5 4 14 4S10 2 8 2S4 3 4 3V15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M4 22V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </div>
+            <div class="stat-box__text">
+              <span class="stat-box__label">Flags Triggered</span>
+              <span class="stat-box__value">{{ stats.flagsTriggered }}</span>
+              <span class="stat-box__meta stat-box__meta--danger">Incidents</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Activity Overview Card -->
+      <section class="card" aria-labelledby="activityTitle">
+        <h2 class="card__title" id="activityTitle">
+          <svg class="card__title-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M3 3V21H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M7 16L11 11L14 14L20 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          Activity Overview
+        </h2>
+
+        <div class="chart-wrap">
+          <svg class="chart" viewBox="0 0 320 180" preserveAspectRatio="none" role="img" aria-label="Line chart of proctoring activity today, rising from 20 to 180">
+            <defs>
+              <linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#4F8CFF" stop-opacity="0.28" />
+                <stop offset="100%" stop-color="#4F8CFF" stop-opacity="0" />
+              </linearGradient>
+              <linearGradient id="chartLine" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#4F8CFF" />
+                <stop offset="100%" stop-color="#2FD5C4" />
+              </linearGradient>
+            </defs>
+            <g class="chart__grid">
+              <line x1="0" y1="10" x2="320" y2="10" />
+              <line x1="0" y1="50" x2="320" y2="50" />
+              <line x1="0" y1="90" x2="320" y2="90" />
+              <line x1="0" y1="130" x2="320" y2="130" />
+              <line x1="0" y1="170" x2="320" y2="170" />
+            </g>
+            <path class="chart__area" d="M0,155 L40,148 L80,150 L120,90 L160,110 L200,80 L240,75 L280,60 L320,20 L320,180 L0,180 Z" fill="url(#chartFill)" />
+            <path class="chart__line" d="M0,155 L40,148 L80,150 L120,90 L160,110 L200,80 L240,75 L280,60 L320,20" fill="none" stroke="url(#chartLine)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+            <g class="chart__points" fill="#4F8CFF">
+              <circle cx="0" cy="155" r="3.5" />
+              <circle cx="40" cy="148" r="3.5" />
+              <circle cx="80" cy="150" r="3.5" />
+              <circle cx="120" cy="90" r="3.5" />
+              <circle cx="160" cy="110" r="3.5" />
+              <circle cx="200" cy="80" r="3.5" />
+              <circle cx="240" cy="75" r="3.5" />
+              <circle cx="280" cy="60" r="3.5" />
+              <circle cx="320" cy="20" r="4" class="chart__points--last" />
+            </g>
+          </svg>
+          <div class="chart__yaxis" aria-hidden="true">
+            <span>200</span><span>150</span><span>100</span><span>50</span><span>0</span>
+          </div>
+        </div>
+        <div class="chart__xlabel">Today</div>
+      </section>
+    </div>
+  </div>
+</main>

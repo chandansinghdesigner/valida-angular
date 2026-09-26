@@ -1,0 +1,26 @@
+/* Global application styles.
+   Component-specific visual fidelity (login, dashboard, notifications)
+   lives in each component's own .css file, ported 1:1 from the
+   supplied templates (css/login.css, css/dashboard.css). */
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+a {
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+}

@@ -1,0 +1,151 @@
+<app-navbar [unreadCount]="unreadCount"></app-navbar>
+
+<main class="page">
+  <section class="hero">
+    <div class="hero-copy">
+      <div class="hero-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M18 8a6 6 0 0 0-12 0c0 7-3 8-3 8h18s-3-1-3-8Z" />
+          <path d="M10 20h4" />
+        </svg>
+      </div>
+    </div>
+    <div style="text-align: center;">
+      <h1>Notifications<span>.</span></h1>
+      <p>Stay updated with the latest alerts, system activities and important updates related to your exams and account.</p>
+    </div>
+    <div class="hero-art" [attr.aria-label]="unreadCount + ' unread notifications'">
+      <div class="hero-cloud cloud-one"></div>
+      <div class="hero-cloud cloud-two"></div>
+      <div class="hero-dots"></div>
+
+      <div class="hero-bell" tabindex="0" role="img" [attr.aria-label]="unreadCount + ' notifications'">
+        <span class="bell-ring bell-ring-one"></span>
+        <span class="bell-ring bell-ring-two"></span>
+        <span class="bell-body"></span>
+        <span class="bell-clapper"></span>
+      </div>
+
+      <span class="badge">{{ unreadCount }}</span>
+    </div>
+  </section>
+
+  <div class="layout">
+    <section class="card notifications-card">
+      <div class="card-heading">
+        <h2 class="heading-title">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 8-3 8h18s-3-1-3-8Z" />
+            <path d="M10 20h4" />
+          </svg>
+          All Notifications
+        </h2>
+        <div class="heading-actions">
+          <button class="icon-btn" type="button" title="Show unread only" [attr.aria-pressed]="unreadOnly" [class.active]="unreadOnly" (click)="toggleUnreadOnly()">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 7h16M4 12h16M4 17h10" />
+            </svg>
+          </button>
+          <button class="icon-btn" type="button" title="Mark all as read" (click)="markAllAsRead()">✓</button>
+        </div>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="Notification categories">
+        <button
+          class="tab"
+          *ngFor="let tab of tabs"
+          [class.active]="currentFilter === tab.key"
+          role="tab"
+          (click)="setFilter(tab.key)"
+        >
+          {{ tab.label }}
+        </button>
+      </div>
+
+      <div class="notif-list">
+        <article
+          class="notification"
+          *ngFor="let n of filtered"
+          [class.unread]="!n.read"
+          (click)="open(n)"
+        >
+          <span class="notif-icon" [ngClass]="severityClass(n)">{{ iconFor(n) }}</span>
+          <div class="notif-content">
+            <h3>{{ n.title }}</h3>
+            <p>{{ n.message }}</p>
+          </div>
+          <span class="notif-time">{{ n.timestamp | date: 'short' }}</span>
+          <span class="notif-arrow">›</span>
+        </article>
+      </div>
+
+      <div class="empty" *ngIf="!filtered.length">No notifications found for this category.</div>
+    </section>
+
+    <aside class="side">
+      <section class="card side-card">
+        <h2 class="side-heading">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 19V5M4 19h16" />
+            <path d="m7 15 4-4 3 2 5-7" />
+          </svg>
+          Notification Summary
+        </h2>
+        <div class="summary-grid">
+          <div class="summary sky">
+            <span class="summary-icon">♧</span>
+            <div><strong>{{ countFor('all') }}</strong><small>Total Notifications</small></div>
+          </div>
+          <div class="summary rose">
+            <span class="summary-icon">!</span>
+            <div><strong>{{ countFor('security') }}</strong><small>Security Alerts</small></div>
+          </div>
+          <div class="summary mint">
+            <span class="summary-icon">✓</span>
+            <div><strong>{{ countFor('exam') }}</strong><small>Exam Updates</small></div>
+          </div>
+          <div class="summary lavender">
+            <span class="summary-icon">◷</span>
+            <div><strong>{{ countFor('system') }}</strong><small>System Alerts</small></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card side-card">
+        <h2 class="side-heading">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 5h16l-6 7v6l-4 2v-8L4 5Z" />
+          </svg>
+          Quick Filters
+        </h2>
+        <div class="quick-list">
+          <button
+            class="quick-item"
+            *ngFor="let tab of tabs"
+            [class.active]="currentFilter === tab.key"
+            (click)="setFilter(tab.key)"
+          >
+            <span class="quick-left"><i class="radio"></i>{{ tab.label }}</span>
+            <span>{{ countFor(tab.key) }}</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="card side-card support">
+        <div class="support-top">
+          <div class="support-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 3 20 6v5c0 5.2-3.4 8.8-8 10-4.6-1.2-8-4.8-8-10V6l8-3Z" />
+              <path d="m9 12 2 2 4-4" />
+            </svg>
+          </div>
+          <div>
+            <h3>Need Help?</h3>
+            <p>If you have any questions or need assistance, our support team is here to help.</p>
+          </div>
+        </div>
+        <button class="support-btn">◉ &nbsp; Contact Support <b>›</b></button>
+      </section>
+    </aside>
+  </div>
+</main>

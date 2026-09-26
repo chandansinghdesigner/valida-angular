@@ -1,0 +1,70 @@
+<app-navbar></app-navbar>
+
+<main class="page">
+  <section class="hero" style="flex-direction: column;">
+    <h1 class="hero__title">Live Proctoring <span class="hero__title--accent">Room — Exam {{ examId }}</span></h1>
+    <p class="hero__subtitle">Real-time candidate camera, screen share, and proctor chat for this exam session.</p>
+  </section>
+
+  <div class="live-grid">
+    <!-- ---- VIDEO / SCREEN FEEDS ---- -->
+    <section class="card" aria-labelledby="feedTitle">
+      <h2 class="card__title" id="feedTitle">
+        <svg class="card__title-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M23 7L16 12L23 17V7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          <rect x="1" y="5" width="15" height="14" rx="2" stroke="currentColor" stroke-width="2" />
+        </svg>
+        Candidate Feeds
+      </h2>
+
+      <div class="feed-stack">
+        <div class="feed-box">
+          <span class="feed-box__label">
+            <span aria-hidden="true">●</span> Camera
+          </span>
+          <video #cameraVideo autoplay playsinline muted [hidden]="!hasCamera"></video>
+          <p class="feed-box__empty" *ngIf="!hasCamera">
+            No camera feed yet. Use "Simulate Feeds" below, or wait for the candidate's WebRTC offer.
+          </p>
+        </div>
+
+        <div class="feed-box">
+          <span class="feed-box__label">
+            <span aria-hidden="true">●</span> Screen Share
+          </span>
+          <video #screenVideo autoplay playsinline muted [hidden]="!hasScreen"></video>
+          <p class="feed-box__empty" *ngIf="!hasScreen">
+            No screen-share feed yet.
+          </p>
+        </div>
+      </div>
+
+      <div class="session-status" [ngClass]="{ 'session-status--live': state === 'live', 'session-status--error': state === 'error' }">
+        <span class="session-status__dot"></span>{{ statusLabel }}
+      </div>
+
+      <div class="feed-toolbar">
+        <button class="btn btn--primary" type="button" (click)="startMockSession()" [disabled]="state === 'live'">
+          Simulate Feeds (Dev/Test)
+        </button>
+        <button class="btn btn--danger" type="button" (click)="endSession()" [disabled]="state !== 'live' && state !== 'connecting'">
+          End Proctoring
+        </button>
+        <button class="btn btn--secondary" type="button" (click)="toggleChat()">
+          {{ showChat ? 'Hide Chat' : 'Show Chat' }}
+        </button>
+        <a class="btn btn--secondary" routerLink="/dashboard">Back to Dashboard</a>
+      </div>
+
+      <p class="hero__subtitle" style="margin-top: 14px; font-size: 13px;">
+        In production, replace <code>startMockSession()</code> with your real signalling flow:
+        call <code>ProctoringService.handleRemoteOffer()</code> when the candidate's SDP offer
+        arrives over your SignalR/REST signalling channel, and stream local ICE candidates back
+        with <code>onLocalIceCandidate()</code>.
+      </p>
+    </section>
+
+    <!-- ---- LIVE CHAT ---- -->
+    <app-live-chat *ngIf="showChat" [sessionId]="examId"></app-live-chat>
+  </div>
+</main>
