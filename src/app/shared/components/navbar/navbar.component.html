@@ -7,19 +7,25 @@
     </div>
 
     <nav class="nav" aria-label="Main navigation">
-      <a routerLink="/dashboard" routerLinkActive="nav__link--active" class="nav__link">
+      <a *ngIf="role !== 'candidate'" routerLink="/dashboard" routerLinkActive="nav__link--active" class="nav__link">
         <svg class="nav__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path d="M3 11L12 3L21 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
           <path d="M5 10V20C5 20.5523 5.44772 21 6 21H9C9.55228 21 10 20.5523 10 20V15C10 14.4477 10.4477 14 11 14H13C13.5523 14 14 14.4477 14 15V20C14 20.5523 14.4477 21 15 21H18C18.5523 21 19 20.5523 19 20V10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
         Dashboard
       </a>
-      <a routerLink="/dashboard" class="nav__link">
+      <a *ngIf="role !== 'candidate'" routerLink="/dashboard" class="nav__link">
         <svg class="nav__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <rect x="3" y="4" width="18" height="13" rx="2" stroke="currentColor" stroke-width="2" />
           <path d="M8 21H16M12 17V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
         </svg>
         Live Exams
+      </a>
+      <a *ngIf="role === 'candidate'" routerLink="/candidate/exams" routerLinkActive="nav__link--active" class="nav__link">
+        <i class="fa-solid fa-file-pen nav__icon" aria-hidden="true"></i> My Exams
+      </a>
+      <a *ngIf="role === 'admin' || role === 'super_admin'" routerLink="/admin/dashboard" routerLinkActive="nav__link--active" class="nav__link">
+        <i class="fa-solid fa-user-shield nav__icon" aria-hidden="true"></i> Admin
       </a>
       <a routerLink="/notifications" routerLinkActive="nav__link--active" class="nav__link">
         <svg class="nav__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">

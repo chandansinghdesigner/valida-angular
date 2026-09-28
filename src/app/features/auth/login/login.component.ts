@@ -65,7 +65,7 @@ export class LoginComponent {
     this.auth.login({ email, password, remember }).subscribe({
       next: () => {
         this.submitting = false;
-        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/dashboard';
+        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || this.auth.homeRoute();
         this.router.navigateByUrl(returnUrl);
       },
       error: (err: Error) => {

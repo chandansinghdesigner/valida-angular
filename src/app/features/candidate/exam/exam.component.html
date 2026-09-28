@@ -1,0 +1,109 @@
+@if (loadError() && !started()) {
+  <main class="ex-center"><div class="v-card"><div class="v-alert v-alert--bad" role="alert">{{ loadError() }}</div></div></main>
+} @else if (!started()) {
+  <main class="ex-center">
+    <section class="v-card ex-gate" aria-labelledby="gate">
+      <h1 id="gate">{{ exam()?.title }}</h1>
+      <p class="v-muted">{{ exam()?.durationMinutes }} minutes · {{ questions().length }} questions.
+        The timer starts when you press Begin, and the exam will enter fullscreen.</p>
+      <button class="v-btn" type="button" [disabled]="!exam() || !questions().length" (click)="begin()">Begin Exam</button>
+    </section>
+  </main>
+} @else {
+  <div class="ex-shell">
+    <header class="ex-top">
+      <img src="assets/valida-logo.png" alt="Valida" height="30" />
+      <strong>{{ exam()?.title }}</strong>
+      <span>Question {{ index() + 1 }} / {{ questions().length }}</span>
+      <span class="ex-clock" [class.ex-clock--low]="remainingSeconds() < 300" role="timer" aria-label="Time remaining">{{ clock() }}</span>
+    </header>
+
+    @if (proctoring.warning(); as w) {
+      <div class="v-alert v-alert--warn ex-warn" role="alert">
+        {{ w }}
+        <span class="v-row">
+          <button class="v-btn v-btn--ghost" type="button" (click)="reenterFullscreen()">Return to fullscreen</button>
+          <button class="v-btn v-btn--ghost" type="button" (click)="proctoring.dismissWarning()">Dismiss</button>
+        </span>
+      </div>
+    }
+    @if (loadError()) { <div class="v-alert v-alert--bad ex-warn" role="alert">{{ loadError() }}</div> }
+
+    <div class="ex-body">
+      <main class="v-card ex-question">
+        @if (current(); as q) {
+          <p class="v-muted">{{ q.marks }} mark(s) · <span [attr.aria-live]="'polite'">{{ saveState() === 'saved' ? 'All answers saved' : saveState() === 'saving' ? 'Saving…' : 'Waiting to save' }}</span></p>
+          <h2 id="qtext">{{ q.text }}</h2>
+
+          @if (q.type === 'SHORT') {
+            <input class="ex-input" type="text" aria-labelledby="qtext" [value]="text(q)" (input)="setAnswer(q, $any($event.target).value)" />
+          } @else if (q.type === 'LONG') {
+            <textarea class="ex-input" rows="8" aria-labelledby="qtext" [value]="text(q)" (input)="setAnswer(q, $any($event.target).value)"></textarea>
+          } @else {
+            <div role="group" aria-labelledby="qtext">
+              @for (o of q.options; track o.id) {
+                <label class="ex-option" [class.ex-option--on]="selected(q, o.id)">
+                  <input [type]="q.type === 'MULTIPLE' ? 'checkbox' : 'radio'" [name]="q.id" [checked]="selected(q, o.id)" (change)="choose(q, o.id)" />
+                  {{ o.text }}
+                </label>
+              }
+            </div>
+          }
+
+          <div class="v-row ex-actions">
+            <button class="v-btn v-btn--ghost" type="button" [disabled]="index() === 0" (click)="go(index() - 1)">Previous</button>
+            <button class="v-btn v-btn--ghost" type="button" [attr.aria-pressed]="marked().has(q.id)" (click)="toggleMark()">
+              {{ marked().has(q.id) ? 'Unmark review' : 'Mark for Review' }}
+            </button>
+            <button class="v-btn" type="button" (click)="saveNext()">{{ index() === questions().length - 1 ? 'Save & Finish' : 'Save & Next' }}</button>
+          </div>
+        }
+      </main>
+
+      <aside class="ex-side">
+        <section class="v-card" aria-label="Question palette">
+          <h3>Question Palette</h3>
+          <div class="ex-palette">
+            @for (q of questions(); track q.id; let i = $index) {
+              <button type="button" class="ex-pal" [class]="'ex-pal ex-pal--' + state(q)" [class.ex-pal--cur]="i === index()"
+                [attr.aria-label]="'Question ' + (i + 1) + ', ' + state(q).toLowerCase().replaceAll('_', ' ')"
+                [attr.aria-current]="i === index() ? 'true' : null" (click)="go(i)">{{ i + 1 }}</button>
+            }
+          </div>
+          <ul class="ex-legend v-muted">
+            <li><i class="ex-pal--NOT_VISITED"></i>Not visited</li><li><i class="ex-pal--VISITED"></i>Visited</li>
+            <li><i class="ex-pal--ANSWERED"></i>Answered</li><li><i class="ex-pal--MARKED_FOR_REVIEW"></i>Review</li>
+            <li><i class="ex-pal--ANSWERED_AND_MARKED"></i>Answered + review</li>
+          </ul>
+        </section>
+
+        <section class="v-card" aria-label="Monitoring status">
+          <video #cam autoplay muted playsinline class="ex-cam"></video>
+          <div class="ex-status">
+            <span class="v-badge" [class]="cameraStream() ? 'v-badge--ok' : 'v-badge--bad'">Camera {{ cameraStream() ? 'live' : 'off' }}</span>
+            <span class="v-badge" [class]="screenActive() ? 'v-badge--ok' : 'v-badge--bad'">Screen {{ screenActive() ? 'active' : 'stopped' }}</span>
+          </div>
+          <p class="v-muted" style="margin:8px 0 0">Events logged: {{ proctoring.events().length }}</p>
+        </section>
+      </aside>
+    </div>
+  </div>
+
+  @if (submitOpen()) {
+    <div class="v-overlay" role="dialog" aria-modal="true" aria-labelledby="sub-t">
+      <div class="v-dialog">
+        <h2 id="sub-t" style="margin-top:0">Submit exam?</h2>
+        <ul style="line-height:1.9;padding-left:18px">
+          <li>Answered: {{ answeredCount() }} / {{ questions().length }}</li>
+          <li>Unanswered: {{ questions().length - answeredCount() }}</li>
+          <li>Marked for review: {{ markedCount() }}</li>
+        </ul>
+        <div class="v-row" style="justify-content:flex-end">
+          <button class="v-btn v-btn--ghost" type="button" (click)="submitOpen.set(false)">Cancel</button>
+          <button class="v-btn" type="button" [disabled]="submitting()" (click)="submit()">Submit Exam</button>
+        </div>
+      </div>
+    </div>
+  }
+  @if (submitting()) { <div class="v-overlay" role="status"><div class="v-dialog">Submitting your exam…</div></div> }
+}

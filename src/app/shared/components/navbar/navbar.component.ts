@@ -31,6 +31,10 @@ export class NavbarComponent {
     return this.auth.currentUser;
   }
 
+  get role() {
+    return this.auth.currentUser?.role;
+  }
+
   toggleProfileMenu(): void {
     this.profileMenuOpen = !this.profileMenuOpen;
   }

@@ -1,9 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, catchError, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, of, tap, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
-import { AuthResponse, LoginRequest, SignupRequest, User } from '../models/user.model';
+import { AuthResponse, LoginRequest, SignupRequest, User, UserRole } from '../models/user.model';
 
 const TOKEN_KEY = 'valida_auth_token';
 const REFRESH_TOKEN_KEY = 'valida_refresh_token';
@@ -32,9 +32,21 @@ export class AuthService {
     return !!this.getToken();
   }
 
+  /** Default landing route for the signed-in user's role. */
+  homeRoute(): string {
+    switch (this.currentUser?.role) {
+      case 'candidate': return '/candidate/exams';
+      case 'admin':
+      case 'super_admin': return '/admin/dashboard';
+      case 'proctor': return '/dashboard';
+      default: return '/login';
+    }
+  }
+
   /** POST /auth/login */
   login(payload: LoginRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.baseUrl}/login`, payload).pipe(
+      catchError((err) => this.demoAuth(err, this.demoUser(payload.email))),
       tap((res) => this.setSession(res, payload.remember ?? true)),
       catchError((err) => throwError(() => this.normalizeError(err, 'Invalid email or password.')))
     );
@@ -49,6 +61,7 @@ export class AuthService {
    */
   signup(payload: SignupRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.baseUrl}/signup`, payload).pipe(
+      catchError((err) => this.demoAuth(err, this.demoUser(payload.email, payload.name))),
       catchError((err) => throwError(() => this.normalizeError(err, 'Could not create your account.')))
     );
   }
@@ -78,8 +91,9 @@ export class AuthService {
     if (res.refreshToken) {
       store.setItem(REFRESH_TOKEN_KEY, res.refreshToken);
     }
-    store.setItem(USER_KEY, JSON.stringify(res.user));
-    this.currentUserSubject.next(res.user);
+    const user: User = { ...res.user, role: String(res.user.role).toLowerCase() as UserRole };
+    store.setItem(USER_KEY, JSON.stringify(user));
+    this.currentUserSubject.next(user);
     this.isAuthenticatedSubject.next(true);
   }
 
@@ -102,6 +116,23 @@ export class AuthService {
     } catch {
       return null;
     }
+  }
+
+  /**
+   * Dev-only: when demoMode is on and the API cannot be reached (status 0),
+   * sign in locally. Role comes from the email: contains "admin" -> admin,
+   * "candidate"/"student" -> candidate, anything else -> proctor.
+   */
+  private demoAuth(err: { status?: number }, user: User): Observable<AuthResponse> {
+    return environment.demoMode && err?.status === 0
+      ? of({ token: 'demo-token', user })
+      : throwError(() => err);
+  }
+
+  private demoUser(email: string, name?: string): User {
+    const e = email.toLowerCase();
+    const role: UserRole = e.includes('admin') ? 'admin' : /candidate|student/.test(e) ? 'candidate' : 'proctor';
+    return { id: 'demo-' + e, name: name || email.split('@')[0], email, role };
   }
 
   private normalizeError(err: unknown, fallback: string): Error {

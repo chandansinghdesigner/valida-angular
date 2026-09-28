@@ -142,3 +142,45 @@ await proctoringService.addRemoteIceCandidate(candidate);
 
 Plug your signalling transport (SignalR is a natural fit, reusing the same
 hub infrastructure as the chat feature) into these three calls.
+
+---
+
+## 7. Candidate exam flow, roles & admin (added)
+
+**Roles** — `super_admin | admin | proctor | candidate` (API values are lower-cased on login). `roleGuard`
+(`data: { roles: [...] }`) sends users to their own home (`AuthService.homeRoute()`). The guard is UX only; the API must enforce access.
+
+| Role | Home | Routes |
+|------|------|--------|
+| candidate | `/candidate/exams` | `/candidate/exams/:id/instructions → system-check → start → result` |
+| proctor | `/dashboard` | `/dashboard`, `/live-proctoring/:examId`, `/notifications` |
+| admin / super_admin | `/admin/dashboard` | admin dashboard + the proctor console |
+
+**Exam engine** — server-provided `startTime/endTime/serverTime` drive the timer (offset-corrected, auto-submit at 0),
+question palette (5 states), mark for review, debounced auto-save with offline queue + retry, submit summary dialog.
+Answer keys are never sent to the browser.
+
+**Proctoring signals (browser-detectable only)** — fullscreen exit, tab hidden, window blur, copy/paste/cut/right-click,
+camera/mic/screen track ended, offline/online. Events are de-duplicated (2 s), shown to the candidate and POSTed to
+`/proctoring/events`. They are review signals, not proof of misconduct.
+
+**Extra REST endpoints used**
+
+| Method | Endpoint |
+|--------|----------|
+| GET | `/exams/assigned`, `/exams/:id`, `/exams/:id/questions`, `/exams/:id/result` |
+| POST | `/exams/:id/sessions` → `{ id, examId, startTime, endTime, serverTime }` |
+| PUT | `/sessions/:sid/answers/:questionId` |
+| POST | `/sessions/:sid/submit`, `/proctoring/events` |
+| GET | `/admin/stats`, `/admin/exams` |
+
+**Demo mode** — `environment.demoMode` (true in dev, false in prod). When true and the API is unreachable, exam/admin screens use
+`core/demo/demo-data.ts`. The demo result score is simulated. Sign-in still needs your API (or set a demo user in localStorage).
+
+**Not yet implemented** — face detection / identity verification, candidate-side WebRTC offer + SignalR signalling and
+`POST /webrtc/turn-credentials`, recording, admin CRUD (users, exams, question bank, reports, audit logs), unit/E2E tests, Docker.
+
+**Build note** — `anyComponentStyle` budget raised to 50 kB/80 kB in `angular.json` because the ported theme CSS files are ~42 kB each.
+
+**Demo sign-in** — with `demoMode: true` and no API running (connection refused), any valid email + 8-character password signs in locally.
+Email containing `admin` -> admin, `candidate`/`student` -> candidate, otherwise proctor. Never enabled in production builds.

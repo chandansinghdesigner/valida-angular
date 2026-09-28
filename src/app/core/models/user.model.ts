@@ -1,8 +1,10 @@
+export type UserRole = 'super_admin' | 'admin' | 'proctor' | 'candidate';
+
 export interface User {
   id: string;
   name: string;
   email: string;
-  role: 'proctor' | 'admin' | 'candidate';
+  role: UserRole;
 }
 
 export interface LoginRequest {
