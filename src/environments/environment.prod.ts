@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  demoMode: false,
+  demoMode: true,
   apiBaseUrl: 'https://api.valida.certaining.org/api',
   chatHubUrl: 'https://api.valida.certaining.org/hubs/chat',
   alertsHubUrl: 'https://api.valida.certaining.org/hubs/alerts',
